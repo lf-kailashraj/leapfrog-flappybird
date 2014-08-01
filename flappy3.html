@@ -1,0 +1,93 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Flappy Bird</title>
+</head>
+
+<body>
+<style>
+* {
+	padding:0; margin:0;
+}
+#screen {
+	width: 600px;
+	height: 500px;
+	overflow: hidden;
+}
+
+#innerScreen {
+	width: 10000px;
+	height: 500px;
+	background: url("gamebg.jpg");
+	
+}
+
+.bird {
+	width:50px;
+	height:50px;
+	position: absolute;
+}
+</style>
+
+<div id="screen">
+	<div id="innerScreen">
+
+	</div>
+</div>
+
+<script>
+var width = 600;
+var height = 500;
+
+var birdLeft = 200;
+var birdTop = 200;
+var birdHeight = 50;
+var birdWidth = 50;
+
+var innerScreen = document.getElementById("innerScreen");
+
+var bgPosition = 0;
+var speed = 4;
+
+
+function gameLoop() {
+	moveBg();
+}
+
+function moveBg() {
+	bgPosition -= speed;
+	innerScreen.style.marginLeft = bgPosition + "px";
+}
+
+function makeBird() {
+	bird = document.createElement("img");
+	bird.src = "bird1.png";
+	bird.className = "bird";
+	
+	bird.style.left = birdLeft + "px";
+	bird.style.top = birdTop + "px";
+	
+	innerScreen.appendChild(bird);
+	
+	// window.onkeydown = flap;
+	window.onkeyup = flap;
+}
+
+function flap() {
+	birdTop -= 50;
+	birdTop = (birdTop < 0) ? 0 : birdTop;
+	bird.style.top = birdTop + "px";
+}
+
+function game() {
+	makeBird();
+	setInterval(gameLoop, 50);
+}
+
+game();
+
+</script>
+
+</body>
+</html>

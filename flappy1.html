@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Flappy Bird</title>
+</head>
+
+<body>
+<style>
+* {
+	padding:0; margin:0;
+}
+#screen {
+	width: 600px;
+	height: 500px;
+	overflow: hidden;
+}
+
+#innerScreen {
+	width: 10000px;
+	height: 500px;
+	background: url("gamebg.jpg");
+	
+}
+</style>
+
+<div id="screen">
+	<div id="innerScreen">
+
+	</div>
+</div>
+
+<script>
+var width = 600;
+var height = 500;
+
+var innerScreen = document.getElementById("innerScreen");
+
+var bgPosition = 0;
+var speed = 4;
+
+
+function gameLoop() {
+	moveBg();
+}
+
+function moveBg() {
+	bgPosition -= speed;
+	innerScreen.style.marginLeft = bgPosition + "px";
+}
+
+function game() {	
+	setInterval(gameLoop, 50);
+}
+
+game();
+
+</script>
+
+</body>
+</html>

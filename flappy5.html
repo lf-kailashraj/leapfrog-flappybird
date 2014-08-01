@@ -45,12 +45,9 @@ var birdTop = 200;
 var birdHeight = 50;
 var birdWidth = 50;
 
-var bird;
-
 var innerScreen = document.getElementById("innerScreen");
 
 var bgPosition = 0;
-
 var speed = 4;
 
 var gameOver = false;
@@ -166,13 +163,6 @@ function movePipes() {
 		
 		pipe.style.left = pipeLeft + "px";
 		
-		if ((birdLeft+birdWidth) >= pipeLeft && birdLeft < pipeLeft+pipeWidth) {
-			if ((birdTop+birdHeight) > pipeTop && birdTop < pipeTop+pipeHeight)  {
-				
-				console.log(birdLeft, birdTop, pipeLeft, pipeTop);
-				gameIsOver();
-			}
-		}
 	}
 }
 
@@ -186,6 +176,7 @@ function makeBird() {
 	
 	innerScreen.appendChild(bird);
 	
+	// window.onkeydown = flap;
 	window.onkeyup = flap;
 }
 
