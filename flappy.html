@@ -1,0 +1,208 @@
+
+<html>
+<head>
+	<title>Flappy Bird</title>
+</head>
+
+<body>
+<style>
+* {
+	padding:0; margin:0;
+}
+#screen {
+	width: 600px;
+	height: 500px;
+	overflow: hidden;
+}
+
+#innerScreen {
+	width: 10000px;
+	height: 500px;
+	background: url("gamebg.jpg");
+	
+}
+
+.bird {
+	width:50px;
+	height:50px;
+	position: absolute;
+}
+</style>
+
+<div id="screen">
+	<div id="innerScreen">
+
+	</div>
+</div>
+
+<script>
+var width = 600;
+var height = 500;
+
+var birdLeft = 200;
+var birdTop = 200;
+var birdHeight = 50;
+var birdWidth = 50;
+
+var bird;
+
+var innerScreen = document.getElementById("innerScreen");
+
+var bgPosition = 0;
+
+var gameOver = false;
+
+var pipes = [];
+var pipePositions = [
+					[0, 100, 250, 250],
+					[0, 200, 350, 150],
+					[0, 300, 450, 50]
+					 ];
+
+function gameLoop() {
+	if (gameOver) {
+		return;
+	}
+	moveBg();
+	movePipes();
+	gravity();
+	
+	if (bgPosition % 200 == 0) {
+		makePipes();
+	}
+}
+
+function getRandom(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makePipes() {
+	var pp = pipePositions[getRandom(0,2)];
+	
+	
+	var pipe1 = document.createElement("img");
+	pipe1.src = "pipeDown.png";
+	pipe1.style.position = "absolute";
+	var pipe2 = document.createElement("img");
+	pipe2.src = "pipeUp.png";
+	pipe2.style.position = "absolute";
+	
+	var top1 = pp[0];
+	var top2 = pp[2];
+	
+	var height1 = pp[1];
+	var height2 = pp[3];
+	
+	var pipeWidth = 30;
+	
+	pipe1.style.top = top1 + "px";
+	pipe1.style.left = width + "px";
+	
+	pipe1.style.width = pipeWidth + "px";
+	pipe1.style.height = height1 + "px";
+	
+	pipe2.style.top = top2 + "px";
+	pipe2.style.left = width + "px";
+	
+	pipe2.style.width = pipeWidth + "px";
+	pipe2.style.height = height2 + "px";
+	
+	pipe1.setAttribute("data-top", top1);
+	pipe1.setAttribute("data-left", width);
+	pipe1.setAttribute("data-width", pipeWidth);
+	pipe1.setAttribute("data-height", height1);
+	
+	pipe2.setAttribute("data-top", top2);
+	pipe2.setAttribute("data-left", width);
+	pipe2.setAttribute("data-width", pipeWidth);
+	pipe2.setAttribute("data-height", height2);
+	
+	innerScreen.appendChild(pipe1);
+	innerScreen.appendChild(pipe2);
+	
+	pipes.push(pipe1);
+	pipes.push(pipe2);
+}
+
+function gravity() {
+	birdTop += 5;
+
+	if (birdTop+birdHeight >= height) {
+		birdTop = height - birdHeight;
+		gameIsOver()
+	}
+	
+	bird.style.top = birdTop + "px";
+}
+
+function gameIsOver() {
+	gameOver = true;
+	alert("Game over!");
+}
+
+function moveBg() {
+	bgPosition -= 4;
+	innerScreen.style.marginLeft = bgPosition + "px";
+}
+
+function movePipes() {
+	if (gameOver) {
+		return;
+	}
+	for (var i=0; i<pipes.length; i++) {
+		var pipe1 = pipes[i];
+		
+		var top1 = +pipe1.getAttribute("data-top");
+		var left1 = +pipe1.getAttribute("data-left");
+		var height1 = +pipe1.getAttribute("data-height");
+		var width1 = +pipe1.getAttribute("data-width");
+		
+		left1 -= 4;
+		
+		pipe1.setAttribute("data-left", left1);
+		
+		pipe1.style.left = left1 + "px";
+		
+		if ((birdLeft+birdWidth) >= left1 && birdLeft < left1+width1) {
+			if ((birdTop+birdHeight) > top1 && birdTop < top1+height1)  {
+				
+				console.log(birdLeft, birdTop, left1, top1);
+				gameIsOver();
+			}
+		}
+	}
+}
+
+function makeBird() {
+	bird = document.createElement("img");
+	bird.src = "bird1.png";
+	bird.className = "bird";
+	
+	bird.style.left = birdLeft + "px";
+	bird.style.top = birdTop + "px";
+	
+	innerScreen.appendChild(bird);
+	
+	window.onkeyup = flap;
+}
+
+function flap() {
+	if (gameOver) {
+		return;
+	}
+	birdTop -= 50;
+	birdTop = (birdTop < 0) ? 0 : birdTop;
+	bird.style.top = birdTop + "px";
+}
+
+function game() {
+	makeBird();
+	setInterval(gameLoop, 50);
+}
+
+game();
+
+</script>
+
+</body>
+</html>
